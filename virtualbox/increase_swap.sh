@@ -10,6 +10,4 @@ if [ $? -ne 0 ]; then
   mkswap /swapfile > /dev/null 2>&1
   swapon /swapfile
   echo '/swapfile none swap defaults 0 0' >> /etc/fstab
-else
-  echo 'swapfile found. No changes made.'
 fi
