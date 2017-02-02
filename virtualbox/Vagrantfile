@@ -1,0 +1,53 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/jessie64"
+  config.vm.hostname = "debian64"
+  vbox_path = '/home/$USER/VirtualBox VMs'
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name = "debian-jessie64"
+    vb.memory = "2048"
+
+    # ich9 chipset
+    vb.customize [
+      "modifyvm", :id,
+      "--chipset", "ich9"
+    ]
+
+    # convert vmdk (default) to vdi format
+    vb.customize [
+      "clonemedium",
+      "#{vbox_path}/#{vb.name}/box-disk1.vmdk",
+      "#{vbox_path}/#{vb.name}/disk1.vdi",
+      "--format", "VDI"
+    ]
+
+    # resize vdi
+    vb.customize [
+      "modifymedium",
+      "#{vbox_path}/#{vb.name}/disk1.vdi",
+      "--resize", 10 * 1024
+    ]
+
+    # attach the vdi back to virtualbox
+    vb.customize [
+      "storageattach", :id,
+      "--storagectl", "SATA Controller",
+      "--port", "0",
+      "--device", "0",
+      "--type", "hdd",
+      "--medium", "#{vbox_path}/#{vb.name}/disk1.vdi"
+    ]
+
+    # fix slow dns lookup
+    vb.customize [
+      "modifyvm", :id,
+      "--natdnshostresolver1", "on"
+    ]
+
+    config.vm.provision "shell", path: "bootstrap.sh"
+    config.vm.provision "shell", path: "increase_swap.sh"
+  end
+end
