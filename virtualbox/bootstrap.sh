@@ -1,7 +1,7 @@
 sed -i 's/mesg n/tty -s \&\& mesg n/g' /root/.profile
 
 apt-get update -y > /dev/null 2>&1
-apt-get upgrade -y > /dev/null 2>&1
+# apt-get upgrade -y > /dev/null 2>&1
 apt-get install -y vim zsh git chrony > /dev/null 2>&1
 
 systemctl stop exim4.service
