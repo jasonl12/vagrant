@@ -1,3 +1,4 @@
+# "stdin: is not a tty"
 sed -i 's/mesg n/tty -s \&\& mesg n/g' /root/.profile
 
 apt-get update -y > /dev/null 2>&1
