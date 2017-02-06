@@ -4,6 +4,12 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/jessie64"
   config.vm.hostname = "debian64"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+  # sudo dnf install ruby-devel zlib-devel
+  # gem install ffi -v '1.9.17'
+  # vagrant plugin install vagrant-vbguest
+  config.vm.synced_folder "./shared", "/shared", type: "virtualbox"
   vbox_path = '/home/$USER/VirtualBox VMs'
 
   config.vm.provider "virtualbox" do |vb|
