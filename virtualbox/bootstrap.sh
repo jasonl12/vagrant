@@ -10,3 +10,14 @@ systemctl stop nfs-common.service
 systemctl disable exim4.service > /dev/null 2>&1
 systemctl disable nfs-common.service > /dev/null 2>&1
 timedatectl set-timezone America/Los_Angeles
+
+if [ ! -f /home/vagrant/get-pip.py ]; then
+  su - vagrant
+  wget https://bootstrap.pypa.io/get-pip.py
+  sudo python get-pip.py
+  mkdir /home/vagrant/.pip
+  cat <<EOF > /home/vagrant/.pip/pip.conf
+[list]
+format=columns
+EOF
+fi
