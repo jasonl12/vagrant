@@ -11,6 +11,14 @@ systemctl disable exim4.service > /dev/null 2>&1
 systemctl disable nfs-common.service > /dev/null 2>&1
 timedatectl set-timezone America/Los_Angeles
 
+grep -q 'vboxsf' /etc/initramfs-tools/modules
+if [ $? -ne 0 ]; then
+  echo "vboxsf" >> /etc/initramfs-tools/modules
+  echo "shared /shared vboxsf defaults,uid=`id -u vagrant`,\
+gid=`id -g vagrant` 0 0" >> /etc/fstab
+  update-initramfs -u
+fi
+
 if [ ! -f /home/vagrant/get-pip.py ]; then
   su - vagrant
   wget https://bootstrap.pypa.io/get-pip.py
